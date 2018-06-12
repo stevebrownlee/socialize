@@ -2,10 +2,7 @@ import React, { Component } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
 import NavBar from "./nav/NavBar"
-import { Link, Switch, Route } from 'react-router';
-import Profile from "./user/Profile";
-import SearchResults from "./search/SearchResults";
-import Home from "./newsfeed/Home";
+import Main from "./Main";
 
 
 class App extends Component {
@@ -29,11 +26,7 @@ class App extends Component {
                     searchHandler={this.performSearch}
                 />
 
-                <Switch>
-                    <Route component={Profile} pattern="/profile/:id" />
-                    <Route exactly component={SearchResults} pattern="/results" />
-                    <Route exactly component={Home} pattern="/" />
-                </Switch>
+                <Main />
             </React.Fragment>
         )
     }

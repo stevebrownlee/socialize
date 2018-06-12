@@ -5,6 +5,7 @@ import PostList from "./PostList"
 import AdList from "../ads/AdList"
 import FriendList from "../friends/FriendList"
 
+
 export default class Home extends Component {
 
     state = {
