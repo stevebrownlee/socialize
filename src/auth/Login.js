@@ -15,11 +15,11 @@ export default class Login extends Component {
     }
 
     // Update state whenever an input field is edited
-    handleFieldChange = function (evt) {
+    handleFieldChange = (evt) => {
         const stateToChange = {}
         stateToChange[evt.target.id] = evt.target.value
         this.setState(stateToChange)
-    }.bind(this)
+    }
 
     // Handle for login submit
     handleLogin = (e) => {
@@ -31,8 +31,7 @@ export default class Login extends Component {
             .then(user => {
                 // User exists. Set local storage, and show home view
                 if (user.length) {
-                    this.props.setActiveUser(user[0].id)
-                    this.props.showView("home")
+                    this.props.showView("home", { activeUser: user[0].id })
 
                 // User doesn't exist
                 } else {
@@ -43,7 +42,6 @@ export default class Login extends Component {
                     window.setTimeout(() => { $.modal.close() }, 2000)
 
                 }
-
             })
     }
 

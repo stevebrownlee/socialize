@@ -24,11 +24,11 @@ export default class NavBar extends Component {
 
     LoginLogout = () => {
         if (this.props.activeUser === null) {
-            return <a className="nav-link" id="nav__login"
-                onClick={this.props.viewHandler} href="#">Login</a>
+            return <a className="nav-link"
+                onClick={() => this.props.showView("login")} href="#">Login</a>
         } else {
-            return <a className="nav-link" id="nav__logout"
-                onClick={this.props.viewHandler} href="#">Logout</a>
+            return <a className="nav-link"
+                onClick={() => this.props.showView("logout", { activeUser: null, notifications: [] })} href="#">Logout</a>
         }
     }
 
@@ -41,7 +41,7 @@ export default class NavBar extends Component {
     render() {
         return (
             <nav className="navbar navbar-light fixed-top light-blue flex-md-nowrap p-0 shadow">
-                <a className="navbar-brand col-sm-3 col-md-2 mr-0" onClick={this.props.viewHandler} href="#">
+                <a className="navbar-brand col-sm-3 col-md-2 mr-0" onClick={this.props.showView} href="#">
                     <img id="nav__home" src={yak} style={{ height: `50px` }} />
                 </a>
                 <input id="searchTerms"

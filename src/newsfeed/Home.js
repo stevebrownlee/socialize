@@ -50,7 +50,7 @@ export default class Home extends Component {
             <div className="container-full">
                 <div className="row">
                     <div className="col col-sm-2">
-                        <FriendList activeUser={this.props.activeUser} viewHandler={this.props.viewHandler} />
+                        <FriendList activeUser={this.props.activeUser} showView={this.props.showView} />
                     </div>
                     <div className="col col-sm-1"></div>
                     <div className="col content col-sm-6">

@@ -14,7 +14,7 @@ export default class SearchResults extends Component {
 
     showProfile = (e) => {
         const id = e.target.id.split("--")[1]
-        this.props.viewHandler("profile", {userId: id})
+        this.props.showView("profile", {userId: id})
     }
 
     render() {

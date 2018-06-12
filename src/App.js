@@ -1,15 +1,17 @@
-import React, { Component } from 'react'
-import auth0 from "auth0-js/build/auth0";
+import React, { Component } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
-import './App.css'
-import Settings from "./Settings"
-import NavBar from './nav/NavBar';
-import Home from './newsfeed/Home';
-import Login from './auth/Login';
-import SearchResults from './search/SearchResults';
-import Profile from './user/Profile';
-import Register from './auth/Register';
-import Auth from './auth/Auth.js'
+import "./App.css"
+import NavBar from "./nav/NavBar"
+import Home from "./newsfeed/Home"
+import Login from "./auth/Login"
+import SearchResults from "./search/SearchResults"
+import Profile from "./user/Profile"
+import Register from "./auth/Register"
+import Auth from "./auth/Auth.js"
+import Notifications from "./user/Notifications"
+import Search from "./search/Search"
+import Logout from "./auth/Logout";
+import LoginPrompt from "./auth/LoginPrompt";
 
 class App extends Component {
     constructor(props) {
@@ -20,124 +22,41 @@ class App extends Component {
         // Set initial state
         this.state = {
             currentView: "login",
-            searchTerms: "",
-            activeUser: localStorage.getItem("yakId"),
-            foundItems: {
-                posts: [],
-                users: []
-            },
-            notifications: []
+            viewProps: {
+                notifications: [],
+                activeUser: localStorage.getItem("yakId")
+            }
         }
     }
 
-    SearchingView = () => (<h1 style={{ marginTop: `125px` }}>Searching...</h1>)
-
-    getNotifications = (id) => {
-        // Any pending friend requests
-        return fetch(`${Settings.remoteURL}/friends?acceptedFriendId=${id}&pending=true`)
-            .then(r => r.json())
-            .then(relationships => {
-                if (relationships.length) {
-                    const allFriendships = relationships.map(r => r.requestingFriendId)
-                        .map(id => `id=${id}`)
-                        .join("&")
-
-                    // Query users table for all matching friends
-                    return fetch(`${Settings.remoteURL}/users?${allFriendships}`)
-                        .then(r => r.json())
-                        .then(users => {
-                            return users.map(u => `${u.name} has sent you a friend request`)
-                        })
-                }
-            })
-
-
-        // A friend has sent a private message
-
-        // A friend has created a new event
-    }
-
-
-    // Search handler -> passed to NavBar
-    performSearch = terms => {
-        this.setState({
-            searchTerms: terms,
-            currentView: "searching"
-        })
-
-        const futureFoundItems = {}
-
-        fetch(`${Settings.remoteURL}/posts?message_like=${encodeURI(terms)}&_expand=user`)
-            .then(r => r.json())
-            .then(posts => {
-                futureFoundItems.posts = posts
-                return fetch(`${Settings.remoteURL}/users?q=${encodeURI(terms)}`)
-            })
-            .then(r => r.json())
-            .then(users => {
-                futureFoundItems.users = users
-
-                setTimeout(() => {
-                    this.setState({
-                        foundItems: futureFoundItems,
-                        currentView: "results"
-                    })
-
-                }, 1000);
-            })
-    }
-
-    // Function to update local storage and set activeUser state
-    setActiveUser = (val) => {
-        if (val) {
-            localStorage.setItem("yakId", val)
-        } else {
-            localStorage.removeItem("yakId")
-        }
-        this.setState({
-            activeUser: val,
-            notifications: []
-        })
-    }
+    performSearch = (searchTerms) => Search
+                        .getResults(searchTerms)
+                        .then(foundItems => this.showView("results", foundItems))
 
     // View switcher -> passed to NavBar and Login
     // Argument can be an event (via NavBar) or a string (via Login)
-    showView = (e, ...props) => {
-        let view = null
+    showView = (viewOrEvent, ...props) => {
+        const view = viewOrEvent.hasOwnProperty("target") ?
+                     viewOrEvent.target.id.split("__")[1] :
+                     viewOrEvent
 
-        // Click event triggered switching view
-        if (e.hasOwnProperty("target")) {
-            view = e.target.id.split("__")[1]
-
-        // View switch manually triggered by passing in string
-        } else {
-            view = e
-        }
-
-        // If user clicked logout in nav, empty local storage and update activeUser state
-        if (view === "logout") {
-            // Update state to correct view will be rendered
+        Notifications.load(this.state.viewProps.activeUser).then(notes => {
             this.setState({
-                currentView: "logout",
-                activeUser: null,
-                notifications: [],
-                viewProps: Object.assign({}, ...props)
+                currentView: view,
+                viewProps: Object.assign({
+                    showView: this.showView,
+                    notifications: notes,
+                    activeUser: this.state.viewProps.activeUser
+                }, ...props)
             })
-        } else {
-            this.getNotifications().then(notes => {
-                // Update state to correct view will be rendered
-                this.setState({
-                    currentView: view,
-                    viewProps: Object.assign({}, ...props),
-                    notifications: notes
-                })
-            })
-        }
+        })
     }
+
+
 
     componentDidMount() {
         // Do I have an active user?
-        if (this.state.activeUser === null) {
+        if (this.state.viewProps.activeUser === null) {
 
             // Check if user currently authenticated, or have redirected from Auth0 login
             this.auth.checkAuthentication().then(authenticated => {
@@ -148,25 +67,19 @@ class App extends Component {
                         // Got profile and POSTed to API, store API id
                         localStorage.setItem("yakId", id)
 
-                        this.getNotifications(id).then(notes => {
-                            // Update state so correct view will be rendered
-                            this.setState({
-                                currentView: "home",
-                                activeUser: id,
-                                notifications: notes
-                            })
+                        Notifications.load(id).then(notes => {
+                            this.showView("home", { notifications: notes, activeUser: id })
                         })
                     })
+                } else {
+                    this.showView("validationFailed")
                 }
             })
 
         // activeUser loaded from localStorage. Get notifications for user.
         } else {
-            this.getNotifications(this.state.activeUser).then(notes => {
-                // Update state so correct view will be rendered
-                this.setState({
-                    notifications: notes
-                })
+            Notifications.load(this.state.viewProps.activeUser).then(notes => {
+                this.showView("home", { notifications: notes })
             })
         }
     }
@@ -186,36 +99,30 @@ class App extends Component {
             User is authenticated, so load the view specified
         */
         switch (this.state.currentView) {
-            case "searching":
-                return <this.SearchingView />
+            case "login":
+                return <LoginPrompt />
             case "profile":
-                return <Profile {...this.state.viewProps}
-                    activeUser={this.state.activeUser}
-                    viewHandler={this.showView} />
+                return <Profile {...this.state.viewProps} />
             case "logout":
                 this.auth.logout()
-                this.setActiveUser(null)
-                this.setState({ currentView: "login" })
+                return <Logout />
             case "results":
-                return <SearchResults foundItems={this.state.foundItems} viewHandler={this.showView} />
+                return <SearchResults {...this.state.viewProps} />
             case "home":
             default:
-                return <Home activeUser={this.state.activeUser} viewHandler={this.showView} />
+                return <Home {...this.state.viewProps} />
         }
     }
 
     render() {
         return (
-            <article>
-                <NavBar viewHandler={this.showView}
+            <React.Fragment>
+                <NavBar {...this.state.viewProps}
                     searchHandler={this.performSearch}
-                    activeUser={this.state.activeUser}
-                    setActiveUser={this.setActiveUser}
-                    notifications={this.state.notifications}
-                />
+                    />
 
                 {this.View()}
-            </article>
+            </React.Fragment>
         )
     }
 }

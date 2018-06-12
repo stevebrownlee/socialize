@@ -1,30 +1,17 @@
 import React, { Component } from "react"
-import Avatar from "../images/avatar.png"
 import "./FriendList.css"
 import Settings from "../Settings"
 
 
 export default class FriendList extends Component {
 
-    // Set initial state
     state = {
         friends: []
     }
 
-    unique = function* (arr) {
-        const map = new Map()
-        let i = 0
-
-        while (i < arr.length) {
-            const key = arr[i]
-            if (!map.has(key) && map.set(key, 1)) yield arr[i]
-            i++
-        }
-    }
-
     showProfile = (e) => {
         const id = e.target.id.split("--")[1]
-        this.props.viewHandler("profile", {userId: id, isFriend: true})
+        this.props.showView("profile", {userId: id, isFriend: true})
     }
 
     componentDidMount() {
@@ -46,9 +33,8 @@ export default class FriendList extends Component {
                         are extracted, converted from Map to an array, then put in URL query string
                         format, and joined together with &
                     */
-                    allFriendships = [...this.unique(allFriendships.concat(relationships.map(r => r.acceptedFriendId)))]
-                        .map(id => `id=${id}`)
-                        .join("&")
+                    const uniqueFriends = new Set(allFriendships.concat(relationships.map(r => r.acceptedFriendId)))
+                    allFriendships = [...uniqueFriends].map(id => `id=${id}`).join("&")
 
                     // Query users table for all matching friends
                     fetch(`${Settings.remoteURL}/users?${allFriendships}`)
@@ -71,7 +57,9 @@ export default class FriendList extends Component {
                             <div className="card-body">
                                 <a className="card-title friendList__name"
                                    id={`friend--${u.id}`}
-                                   onClick={this.showProfile}
+                                   onClick={() => {
+                                        this.props.showView("profile", {userId: u.id, isFriend: true})
+                                   }}
                                    href="#">{u.name}</a>
                             </div>
                         </div>
