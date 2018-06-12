@@ -61,7 +61,6 @@ export default class NavBar extends Component {
                 <ul className="navbar-nav px-3">
                     <li className="nav-item text-nowrap">
                         <a href="#" className="notif" id="nav__profile" onClick={()=>$(".profileMenu").slideToggle(333)}>
-                            <span className="num">{this.props.notifications.length}</span>
                         </a>
                     </li>
                 </ul>
@@ -70,14 +69,6 @@ export default class NavBar extends Component {
                         <this.LoginLogout />
                     </li>
                 </ul>
-                <article className="profileMenu">
-                    <section className="profileMenu__item">
-                        {
-                            this.props.notifications.map((n, idx) =>
-                                <div key={idx}><a title="notifications" id="nav__notifications" href="#">{n}</a></div>)
-                        }
-                    </section>
-                </article>
             </nav>
         )
     }
