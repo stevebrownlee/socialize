@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import Search from "../search/Search"
 import yak from "../images/yak.png"
 import $ from "jquery"
 import "./NavBar.css"
@@ -17,8 +18,13 @@ export default class NavBar extends Component {
      */
     search = (e) => {
         if (e.charCode === 13) {
-            this.props.searchHandler(this.state.searchTerms)
-            this.setState({ searchTerms: "" })
+
+            Search.getResults(this.state.searchTerms)
+            .then(foundItems => {
+                    this.setState({ searchTerms: "" })
+                    this.props.showView("results", foundItems)
+                })
+
         }
     }
 

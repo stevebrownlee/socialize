@@ -9,7 +9,6 @@ import Profile from "./user/Profile"
 import Register from "./auth/Register"
 import Auth from "./auth/Auth.js"
 import Notifications from "./user/Notifications"
-import Search from "./search/Search"
 import Logout from "./auth/Logout";
 import LoginPrompt from "./auth/LoginPrompt";
 
@@ -29,9 +28,6 @@ class App extends Component {
         }
     }
 
-    performSearch = (searchTerms) => Search
-                        .getResults(searchTerms)
-                        .then(foundItems => this.showView("results", foundItems))
 
     // View switcher -> passed to NavBar and Login
     // Argument can be an event (via NavBar) or a string (via Login)
@@ -51,7 +47,6 @@ class App extends Component {
             })
         })
     }
-
 
 
     componentDidMount() {
