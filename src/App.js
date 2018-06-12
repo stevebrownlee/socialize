@@ -1,11 +1,12 @@
 import React, { Component } from "react"
+import { Route } from 'react-router-dom'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
 import NavBar from "./nav/NavBar"
 import Main from "./Main";
 
 
-class App extends Component {
+export default class App extends Component {
     constructor(props) {
         super(props)
 
@@ -22,14 +23,12 @@ class App extends Component {
     render() {
         return (
             <React.Fragment>
-                <NavBar {...this.state.viewProps}
-                    searchHandler={this.performSearch}
-                />
+                <Route render={(history) => (
+                    <NavBar { ...history } />
+                )} />
 
                 <Main />
             </React.Fragment>
         )
     }
 }
-
-export default App

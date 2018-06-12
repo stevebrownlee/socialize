@@ -33,8 +33,9 @@ export default class NavBar extends Component {
             return <a className="nav-link"
                 onClick={() => this.props.showView("login")} href="#">Login</a>
         } else {
-            return <a className="nav-link"
-                onClick={() => this.props.showView("logout", { activeUser: null, notifications: [] })} href="#">Logout</a>
+            return <button className="nav-link"
+                onClick={() => this.props.history.push("/logout")}
+                >Logout</button>
         }
     }
 
