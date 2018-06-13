@@ -8,6 +8,10 @@ import FriendList from "../friends/FriendList"
 
 export default class Home extends Component {
 
+    constructor(props) {
+        super(props)
+    }
+
     state = {
         message: "",
         posts: []

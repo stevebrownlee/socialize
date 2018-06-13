@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import { Link } from "react-router-dom"
 import Search from "../search/Search"
 import yak from "../images/yak.png"
 import $ from "jquery"
@@ -29,13 +30,12 @@ export default class NavBar extends Component {
     }
 
     LoginLogout = () => {
-        if (this.props.activeUser === null) {
-            return <a className="nav-link"
-                onClick={() => this.props.showView("login")} href="#">Login</a>
+        // this.props.history.push("/logout")
+        if (localStorage.getItem("id_token") === null) {
+            return <Link className="nav-link" to="/login">Login</Link>
         } else {
-            return <button className="nav-link"
-                onClick={() => this.props.history.push("/logout")}
-                >Logout</button>
+            return <Link className="nav-link" to="/logout">Logout</Link>
+
         }
     }
 
