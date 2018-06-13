@@ -5,7 +5,6 @@ import "../newsfeed/Post.css"
 
 
 export default class SearchResults extends Component {
-    // Set initial state
     state = {
         posts: [],
         users: [],
@@ -22,7 +21,7 @@ export default class SearchResults extends Component {
             <div className="searchResults">
                 <h1>Search Results</h1>
                 {
-                    this.props.foundItems.posts.map(p =>
+                    this.props.history.location.state.foundItems.posts.map(p =>
                         <div className="card post" key={p.id}>
                             <div className="card-body">
                                 <h5 className="card-title">By {p.user.name}</h5>
@@ -36,7 +35,7 @@ export default class SearchResults extends Component {
                 }
 
                 {
-                    this.props.foundItems.users.map(u =>
+                    this.props.history.location.state.foundItems.users.map(u =>
                         <div className="card post" key={u.id}>
                             <img className="card-img-top avatar" src={Avatar} alt="Generic person image" />
                             <div className="card-body">

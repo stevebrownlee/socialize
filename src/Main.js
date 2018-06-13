@@ -1,11 +1,11 @@
 import { Route, Redirect } from 'react-router-dom'
 import React, { Component } from "react"
-import Profile from './user/Profile';
-import SearchResults from './search/SearchResults';
-import Login from './auth/Login';
-import Auth from './auth/Auth';
-import Home from './newsfeed/Home';
-import Callback from './Callback/Callback';
+import Profile from './user/Profile'
+import SearchResults from './search/SearchResults'
+import Login from './auth/Login'
+import Auth from './auth/Auth'
+import Home from './newsfeed/Home'
+import Callback from './Callback/Callback'
 
 
 export default class Main extends Component {
@@ -15,10 +15,8 @@ export default class Main extends Component {
     }
 
     handleAuthentication = (props) => {
-        console.log(props);
-
         if (/access_token|id_token|error/.test(props.location.hash)) {
-            this.auth.handleAuthentication(props);
+            this.auth.handleAuthentication(props)
         }
     }
 
@@ -31,10 +29,15 @@ export default class Main extends Component {
                 <Route path="/profile/:id" render={(props) =>
                     this.auth.isAuthenticated() ? <Profile auth={this.auth} {...props} /> : <Redirect to="/login" />}
                     />
-                <Route path="/results" render={(props) =>
-                    this.auth.isAuthenticated() ? <SearchResults auth={this.auth} {...props} /> : <Redirect to="/login" />} />
+                <Route path="/results" render={(props) => {
+                    if (this.auth.isAuthenticated()) {
+                        return <SearchResults auth={this.auth} {...props} />
+                    } else {
+                        return <Redirect to="/login" />
+                    }
+                }} />
                 <Route path="/callback" render={(props) => {
-                    this.handleAuthentication(props);
+                    this.handleAuthentication(props)
                     return <Callback {...props} />
                 }} />
                 <Route path="/logout" render={(props) => {

@@ -23,7 +23,11 @@ export default class NavBar extends Component {
             Search.getResults(this.state.searchTerms)
             .then(foundItems => {
                     this.setState({ searchTerms: "" })
-                    this.props.showView("results", foundItems)
+                    this.props.history.push({
+                        pathname: "/results",
+                        state: foundItems
+                    })
+                    // this.props.showView("results", foundItems)
                 })
 
         }
