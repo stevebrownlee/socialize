@@ -32,7 +32,7 @@ export default class NavBar extends Component {
     LoginLogout = () => {
         // this.props.history.push("/logout")
         if (localStorage.getItem("id_token") === null) {
-            return <Link className="nav-link" to="/login">Login</Link>
+            return <span></span>
         } else {
             return <Link className="nav-link" to="/logout">Logout</Link>
 

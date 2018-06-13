@@ -25,13 +25,13 @@ export default class Main extends Component {
 
     render() {
         return (
-            <main>
+            <React.Fragment>
                 <Route exact path="/" render={(props) =>
                     this.auth.isAuthenticated() ? <Home auth={this.auth} {...props} /> : <Redirect to="/login" />}
-                />
+                    />
                 <Route path="/profile/:id" render={(props) =>
                     this.auth.isAuthenticated() ? <Profile auth={this.auth} {...props} /> : <Redirect to="/login" />}
-                />
+                    />
                 <Route path="/results" render={(props) =>
                     this.auth.isAuthenticated() ? <SearchResults auth={this.auth} {...props} /> : <Redirect to="/login" />} />
                 <Route path="/callback" render={(props) => {
@@ -42,8 +42,8 @@ export default class Main extends Component {
                     this.auth.logout()
                     return <Redirect to="/login" />
                 }} />
-            <Route path="/login" render={(props) => <Login auth={this.auth} {...props} />} />
-            </main>
+                <Route path="/login" render={(props) => <Login auth={this.auth} {...props} />} />
+            </React.Fragment>
         )
     }
 }
