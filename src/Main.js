@@ -3,7 +3,6 @@ import React, { Component } from "react"
 import Profile from './user/Profile';
 import SearchResults from './search/SearchResults';
 import Login from './auth/Login';
-import Logout from './auth/Logout';
 import Auth from './auth/Auth';
 import Home from './newsfeed/Home';
 import Callback from './Callback/Callback';
