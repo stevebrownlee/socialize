@@ -4,26 +4,33 @@ import Settings from "../Settings"
 
 
 export default class FriendList extends Component {
+    constructor(props) {
+        super(props)
 
-    state = {
-        friends: []
+        this.state = {
+            friends: [],
+            activeUser: localStorage.getItem("yakId")
+        }
     }
 
-    showProfile = (e) => {
-        const id = e.target.id.split("--")[1]
-        this.props.showView("profile", {userId: id, isFriend: true})
+
+    showProfile = id => {
+        this.props.history.push({
+            pathname: `/profile/${id}`,
+            state: {
+                isFriend: true
+            }
+        })
     }
 
     componentDidMount() {
-        console.log("FriendList componentDidMount")
-
         let allFriendships = []
 
-        fetch(`${Settings.remoteURL}/friends?acceptedFriendId=${this.props.activeUser}&pending=false`)
+        fetch(`${Settings.remoteURL}/friends?acceptedFriendId=${this.state.activeUser}&pending=false`)
             .then(r => r.json())
             .then(relationships => {
                 allFriendships = allFriendships.concat(relationships.map(r => r.requestingFriendId))
-                return fetch(`${Settings.remoteURL}/friends?requestingFriendId=${this.props.activeUser}&pending=false`)
+                return fetch(`${Settings.remoteURL}/friends?requestingFriendId=${this.state.activeUser}&pending=false`)
             })
             .then(r => r.json())
             .then(relationships => {
@@ -57,9 +64,7 @@ export default class FriendList extends Component {
                             <div className="card-body">
                                 <a className="card-title friendList__name"
                                    id={`friend--${u.id}`}
-                                   onClick={() => {
-                                        this.props.showView("profile", {userId: u.id, isFriend: true})
-                                   }}
+                                   onClick={() => this.showProfile(u.id)}
                                    href="#">{u.name}</a>
                             </div>
                         </div>

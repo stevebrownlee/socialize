@@ -17,6 +17,15 @@ export default class Main extends Component {
     handleAuthentication = (props) => {
         if (/access_token|id_token|error/.test(props.location.hash)) {
             this.auth.handleAuthentication(props)
+                .then(() => {
+                    debugger
+                    return this.auth.getProfile()
+                })
+                .then(id => {
+                    debugger
+                    this.props.history.push("/")
+                })
+                .catch(err => console.error(err))
         }
     }
 
@@ -26,7 +35,7 @@ export default class Main extends Component {
                 <Route exact path="/" render={(props) =>
                     this.auth.isAuthenticated() ? <Home auth={this.auth} {...props} /> : <Redirect to="/login" />}
                     />
-                <Route path="/profile/:id" render={(props) =>
+                <Route path="/profile/:profileId" render={(props) =>
                     this.auth.isAuthenticated() ? <Profile auth={this.auth} {...props} /> : <Redirect to="/login" />}
                     />
                 <Route path="/results" render={(props) => {

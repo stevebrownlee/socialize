@@ -19,7 +19,6 @@ export default class NavBar extends Component {
      */
     search = (e) => {
         if (e.charCode === 13) {
-
             Search.getResults(this.state.searchTerms)
             .then(foundItems => {
                     this.setState({ searchTerms: "" })
@@ -27,14 +26,12 @@ export default class NavBar extends Component {
                         pathname: "/results",
                         state: foundItems
                     })
-                    // this.props.showView("results", foundItems)
                 })
 
         }
     }
 
     LoginLogout = () => {
-        // this.props.history.push("/logout")
         if (localStorage.getItem("id_token") === null) {
             return <span></span>
         } else {

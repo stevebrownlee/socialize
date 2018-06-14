@@ -51,7 +51,7 @@ export default class Home extends Component {
             <div className="container-full">
                 <div className="row">
                     <div className="col col-sm-2">
-                        <FriendList activeUser={this.props.activeUser} showView={this.props.showView} />
+                        <FriendList history={this.props.history} />
                     </div>
                     <div className="col col-sm-1"></div>
                     <div className="col content col-sm-6">
@@ -67,7 +67,7 @@ export default class Home extends Component {
                                 </div>
                                 <button type="button" onClick={this.postMessage} className="btn btn-info btn-lg">Post</button>
                             </form>
-                            <PostList posts={this.state.posts} activeUser={this.props.activeUser} />
+                            <PostList posts={this.state.posts} />
                         </div>
                     </div>
                     <div className="col col-sm-1"></div>

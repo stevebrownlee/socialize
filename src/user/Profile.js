@@ -9,10 +9,18 @@ import "jquery-modal/jquery.modal.css"
 
 
 export default class Profile extends Component {
-    state = {
-        posts: [],
-        name: ""
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            posts: [],
+            name: ""
+        }
+
+        console.log(this.props);
+
     }
+
 
     FriendButton = () => {
         if (
@@ -30,6 +38,7 @@ export default class Profile extends Component {
     }
 
     addFriend = e => {
+        const { profileId } = this.props.match.params
         fetch(`${Settings.remoteURL}/friends`, {
             method: "POST",
             headers: {
@@ -37,7 +46,7 @@ export default class Profile extends Component {
             },
             body: JSON.stringify({
                 requestingFriendId: parseInt(this.props.activeUser, 10),
-                acceptedFriendId: parseInt(this.props.userId, 10),
+                acceptedFriendId: parseInt(profileId, 10),
                 pending: true
             })
         })
@@ -61,7 +70,8 @@ export default class Profile extends Component {
 
 
     componentDidMount() {
-        fetch(`${Settings.remoteURL}/posts?userId=${this.props.userId}&_expand=user&_page=1&_limit=5&_sort=id&_order=desc`)
+        const { profileId } = this.props.match.params
+        fetch(`${Settings.remoteURL}/posts?userId=${profileId}&_expand=user&_page=1&_limit=5&_sort=id&_order=desc`)
             .then(r => r.json())
             .then(posts => {
                 // If user has posts, grab their name from the first posts
@@ -73,7 +83,7 @@ export default class Profile extends Component {
 
                 // User had no posts, query user table directly
                 } else {
-                    fetch(`${Settings.remoteURL}/users/${this.props.userId}`)
+                    fetch(`${Settings.remoteURL}/users/${profileId}`)
                         .then(r => r.json())
                         .then(u => {
                             this.setState({

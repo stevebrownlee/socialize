@@ -3,6 +3,9 @@ import Settings from "../Settings"
 
 
 export default class Auth {
+
+    profile = {}
+
     auth0 = new auth0.WebAuth({
         domain: "bagoloot.auth0.com",
         clientID: "RUe9qoLtI2fOjc21FpE460NThgWKUKST",
@@ -17,15 +20,16 @@ export default class Auth {
     }
 
     handleAuthentication = (props) => {
-        this.auth0.parseHash((err, authResult) => {
-            if (authResult && authResult.accessToken && authResult.idToken) {
-                this.setSession(authResult, props)
-                props.history.push("/")
-            } else if (err) {
-                props.history.push("/")
-                console.log(err)
-                alert(`Error: ${err.error}. Check the console for further details.`)
-            }
+        return new Promise((resolve, reject) => {
+            this.auth0.parseHash((err, authResult) => {
+                if (authResult && authResult.accessToken && authResult.idToken) {
+                    this.setSession(authResult, props)
+                    resolve()
+                } else if (err) {
+                    // props.history.push("/")
+                    reject(err)
+                }
+            })
         })
     }
 
@@ -35,8 +39,6 @@ export default class Auth {
         localStorage.setItem('access_token', authResult.accessToken)
         localStorage.setItem('id_token', authResult.idToken)
         localStorage.setItem('expires_at', expiresAt)
-        // navigate to the default route
-        props.history.push("/")
     }
 
     logout = (props) => {
@@ -97,6 +99,7 @@ export default class Auth {
 
                                 // User already has profile in API, resolve with the id
                                 if (users.length) {
+                                    localStorage.setItem("yakId", users[0].id)
                                     resolve(users[0].id)
 
                                 // User not in API, so POST new profile

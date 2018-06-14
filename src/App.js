@@ -12,13 +12,16 @@ export default class App extends Component {
 
         this.state = {
             currentView: "login",
-            viewProps: {
-                notifications: [],
-                activeUser: localStorage.getItem("yakId")
-            }
+            activeUser: localStorage.getItem("yakId")
         }
     }
 
+    setActiveUser = id => {
+        (id === null) ? localStorage.removeItem("yakId") : localStorage.setItem("yakId", id)
+        this.setState({
+            activeUser: id
+        })
+    }
 
     render() {
         return (
@@ -27,7 +30,7 @@ export default class App extends Component {
                     <NavBar { ...history } />
                 )} />
                 <Route render={history => (
-                    <Main { ...history } />
+                    <Main { ...history } activeUser={this.state.activeUser} />
                 )} />
 
             </React.Fragment>

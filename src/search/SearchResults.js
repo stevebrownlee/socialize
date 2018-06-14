@@ -11,10 +11,7 @@ export default class SearchResults extends Component {
         events: []
     }
 
-    showProfile = (e) => {
-        const id = e.target.id.split("--")[1]
-        this.props.showView("profile", {userId: id})
-    }
+    showUserProfile = id => this.props.history.push(`/profile/${id}`)
 
     render() {
         return (
@@ -40,9 +37,8 @@ export default class SearchResults extends Component {
                             <img className="card-img-top avatar" src={Avatar} alt="Generic person image" />
                             <div className="card-body">
                                 <h5 className="card-title">{u.name}</h5>
-                                <a href="#" onClick={this.showProfile}
-                                   id={`user--${u.id}`}
-                                   className="btn btn-outline-success">View profile</a>
+                                <button href="#" onClick={() => this.showUserProfile(u.id)}
+                                   className="btn btn-outline-success">View profile</button>
                             </div>
                         </div>
                     )
