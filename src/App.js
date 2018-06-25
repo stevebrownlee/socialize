@@ -1,16 +1,15 @@
 import React, { Component } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/js/bootstrap.min"
 import "./App.css"
 import NavBar from "./nav/NavBar"
 import Home from "./newsfeed/Home"
-import Login from "./auth/Login"
 import SearchResults from "./search/SearchResults"
 import Profile from "./user/Profile"
-import Register from "./auth/Register"
 import Auth from "./auth/Auth.js"
 import Notifications from "./user/Notifications"
-import Logout from "./auth/Logout";
-import LoginPrompt from "./auth/LoginPrompt";
+import Logout from "./auth/Logout"
+import LoginPrompt from "./auth/LoginPrompt"
 
 class App extends Component {
     constructor(props) {
@@ -112,9 +111,7 @@ class App extends Component {
     render() {
         return (
             <React.Fragment>
-                <NavBar {...this.state.viewProps}
-                    searchHandler={this.performSearch}
-                    />
+                <NavBar {...this.state.viewProps} />
 
                 {this.View()}
             </React.Fragment>
