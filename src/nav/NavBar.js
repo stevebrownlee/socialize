@@ -27,7 +27,6 @@ export default class NavBar extends Component {
                         state: foundItems
                     })
                 })
-
         }
     }
 
@@ -36,7 +35,6 @@ export default class NavBar extends Component {
             return <span></span>
         } else {
             return <Link className="nav-link" to="/logout">Logout</Link>
-
         }
     }
 
@@ -49,7 +47,7 @@ export default class NavBar extends Component {
     render() {
         return (
             <nav className="navbar navbar-light fixed-top light-blue flex-md-nowrap p-0 shadow">
-                <a className="navbar-brand col-sm-3 col-md-2 mr-0" onClick={this.props.showView} href="/">
+                <a className="navbar-brand col-sm-3 col-md-2 mr-0" href="/">
                     <img id="nav__home" src={yak} style={{ height: `50px` }} />
                 </a>
                 <input id="searchTerms"
