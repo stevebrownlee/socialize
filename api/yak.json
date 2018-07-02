@@ -84,6 +84,26 @@
       "message": "I logged in via Google",
       "userId": 8,
       "id": 2
+    },
+    {
+      "message": "Just got paid today",
+      "userId": 8,
+      "id": 4
+    },
+    {
+      "message": "Asheville was awesome",
+      "userId": 8,
+      "id": 5
+    },
+    {
+      "message": "Great Smoky Mountains Railroad from Bryson City to Dillsboro",
+      "userId": 8,
+      "id": 6
+    },
+    {
+      "message": "Skinny Dip Falls on Blue Ridge Parkway south of Asheville",
+      "userId": 8,
+      "id": 7
     }
   ],
   "events": [],

@@ -49,7 +49,7 @@ export default class NavBar extends Component {
     render() {
         return (
             <nav className="navbar navbar-light fixed-top light-blue flex-md-nowrap p-0 shadow">
-                <a className="navbar-brand col-sm-3 col-md-2 mr-0" onClick={this.props.showView} href="#">
+                <a className="navbar-brand col-sm-3 col-md-2 mr-0" onClick={this.props.showView} href="/">
                     <img id="nav__home" src={yak} style={{ height: `50px` }} />
                 </a>
                 <input id="searchTerms"

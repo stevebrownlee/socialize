@@ -20,11 +20,11 @@ export default class Home extends Component {
         },
         body: JSON.stringify({
             message: this.state.message,
-            userId: parseInt(this.props.activeUser, 10)
+            userId: parseInt(this.props.auth.yakId, 10)
         })
     })
     .then(() => {
-        return fetch(`${Settings.remoteURL}/posts?_sort=id&_order=desc&_expand=user&userId=${this.props.activeUser}`)
+        return fetch(`${Settings.remoteURL}/posts?_sort=id&_order=desc&_expand=user&userId=${this.props.auth.yakId}`)
     })
     .then(r => r.json())
     .then(posts => {
@@ -41,7 +41,7 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
-        fetch(`${Settings.remoteURL}/posts?userId=${this.props.activeUser}&_expand=user&_sort=id&_order=desc`)
+        fetch(`${Settings.remoteURL}/posts?userId=${this.props.auth.yakId}&_expand=user&_sort=id&_order=desc`)
             .then(r => r.json())
             .then(posts => this.setState({ posts: posts }))
     }

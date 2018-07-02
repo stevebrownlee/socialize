@@ -1,11 +1,11 @@
 import { Route, Redirect } from 'react-router-dom'
 import React, { Component } from "react"
-import Profile from './user/Profile'
-import SearchResults from './search/SearchResults'
-import Login from './auth/Login'
-import Auth from './auth/Auth'
-import Home from './newsfeed/Home'
-import Callback from './Callback/Callback'
+import Profile from "./user/Profile"
+import SearchResults from "./search/SearchResults"
+import Login from "./auth/Login"
+import Auth from "./auth/Auth"
+import Home from "./newsfeed/Home"
+import Callback from "./Callback/Callback"
 
 
 export default class Main extends Component {
@@ -18,11 +18,9 @@ export default class Main extends Component {
         if (/access_token|id_token|error/.test(props.location.hash)) {
             this.auth.handleAuthentication(props)
                 .then(() => {
-                    debugger
                     return this.auth.getProfile()
                 })
                 .then(id => {
-                    debugger
                     this.props.history.push("/")
                 })
                 .catch(err => console.error(err))

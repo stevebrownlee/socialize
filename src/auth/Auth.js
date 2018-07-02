@@ -9,7 +9,8 @@ export default class Auth {
     auth0 = new auth0.WebAuth({
         domain: "bagoloot.auth0.com",
         clientID: "RUe9qoLtI2fOjc21FpE460NThgWKUKST",
-        redirectUri: "http://localhost:3000/callback",
+        // redirectUri: "http://localhost:3000/callback",
+        redirectUri: "http://yak.nss.team/callback",
         audience: "https://bagoloot.auth0.com/userinfo",
         responseType: "token id_token",
         scope: "openid profile"
@@ -53,6 +54,10 @@ export default class Auth {
         // access token's expiry time
         let expiresAt = JSON.parse(localStorage.getItem('expires_at'))
         return new Date().getTime() < expiresAt
+    }
+
+    get yakId() {
+        return localStorage.getItem("yakId")
     }
 
     getAccessToken() {
