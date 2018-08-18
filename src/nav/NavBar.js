@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import Search from "../search/Search"
-import yak from "../images/yak.png"
+import ViewManager from "../modules/ViewManager"
 import $ from "jquery"
+
+import yak from "../images/yak.png"
 import "./NavBar.css"
 
 
@@ -22,7 +24,7 @@ export default class NavBar extends Component {
             Search.getResults(this.state.searchTerms)
             .then(foundItems => {
                     this.setState({ searchTerms: "" })
-                    this.props.showView("results", foundItems)
+                    ViewManager.broadcast("results", foundItems)
                 })
 
         }
@@ -31,10 +33,10 @@ export default class NavBar extends Component {
     LoginLogout = () => {
         if (this.props.activeUser === null) {
             return <a className="nav-link"
-                onClick={() => this.props.showView("login")} href="#">Login</a>
+                onClick={() => ViewManager.broadcast("login")} href="#">Login</a>
         } else {
             return <a className="nav-link"
-                onClick={() => this.props.showView("logout", { activeUser: null, notifications: [] })} href="#">Logout</a>
+                onClick={() => ViewManager.broadcast("logout", { activeUser: null, notifications: [] })} href="#">Logout</a>
         }
     }
 
@@ -47,7 +49,7 @@ export default class NavBar extends Component {
     render() {
         return (
             <nav className="navbar navbar-light fixed-top light-blue flex-md-nowrap p-0 shadow">
-                <a className="navbar-brand col-sm-3 col-md-2 mr-0" onClick={this.props.showView} href="#">
+                <a className="navbar-brand col-sm-3 col-md-2 mr-0" onClick={() => ViewManager.broadcast("home")} href="#">
                     <img id="nav__home" src={yak} style={{ height: `50px` }} />
                 </a>
                 <input id="searchTerms"

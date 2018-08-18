@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import Settings from "../Settings"
 import "./login.css"
+import ViewManager from "./modules/ViewManager"
 
 
 export default class Register extends Component {
@@ -31,7 +32,7 @@ export default class Register extends Component {
                 // User exists. Set local storage, and show home view
                 if (user.length) {
                     this.props.setActiveUser(user[0].id)
-                    this.props.showView("home")
+                    ViewManager.broadcast("home")
 
                 // User doesn't exist
                 } else {
@@ -55,7 +56,7 @@ export default class Register extends Component {
                     .then(r => r.json())
                     .then(newUser => {
                         this.props.setActiveUser(newUser.id)
-                        this.props.showView("home")
+                        ViewManager.broadcast("home")
                     })
                 }
 

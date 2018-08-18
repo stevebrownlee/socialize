@@ -1,6 +1,8 @@
 import React, { Component } from "react"
-import "./SearchResults.css"
+import ViewManager from "../modules/ViewManager"
+
 import Avatar from "../images/avatar.png"
+import "./SearchResults.css"
 import "../newsfeed/Post.css"
 
 
@@ -14,7 +16,7 @@ export default class SearchResults extends Component {
 
     showProfile = (e) => {
         const id = e.target.id.split("--")[1]
-        this.props.showView("profile", {userId: id})
+        ViewManager.broadcast("profile", {userId: id})
     }
 
     render() {

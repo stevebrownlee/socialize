@@ -84,6 +84,11 @@
       "message": "I logged in via Google",
       "userId": 8,
       "id": 2
+    },
+    {
+      "message": "Let's see if I can make this work with events",
+      "userId": 8,
+      "id": 3
     }
   ],
   "events": [],

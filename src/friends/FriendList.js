@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import "./FriendList.css"
 import Settings from "../Settings"
-
+import ViewManager from "../modules/ViewManager";
 
 export default class FriendList extends Component {
 
@@ -11,7 +11,7 @@ export default class FriendList extends Component {
 
     showProfile = (e) => {
         const id = e.target.id.split("--")[1]
-        this.props.showView("profile", {userId: id, isFriend: true})
+        ViewManager.broadcast("profile", {userId: id, isFriend: true})
     }
 
     componentDidMount() {
@@ -58,7 +58,7 @@ export default class FriendList extends Component {
                                 <a className="card-title friendList__name"
                                    id={`friend--${u.id}`}
                                    onClick={() => {
-                                        this.props.showView("profile", {userId: u.id, isFriend: true})
+                                    ViewManager.broadcast("profile", {userId: u.id, isFriend: true})
                                    }}
                                    href="#">{u.name}</a>
                             </div>

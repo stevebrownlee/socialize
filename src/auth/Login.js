@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import Settings from "../Settings"
+import ViewManager from "./modules/ViewManager"
 import $ from "jquery"
 import modal from "jquery-modal/jquery.modal"
+
 import "jquery-modal/jquery.modal.css"
 import "./login.css"
 
@@ -31,7 +33,7 @@ export default class Login extends Component {
             .then(user => {
                 // User exists. Set local storage, and show home view
                 if (user.length) {
-                    this.props.showView("home", { activeUser: user[0].id })
+                    ViewManager.broadcast("home", { activeUser: user[0].id })
 
                 // User doesn't exist
                 } else {
@@ -70,7 +72,7 @@ export default class Login extends Component {
                 <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 
                 <p className="mt-5 mb-3 text-muted">
-                or <a id="link__register" onClick={this.props.showView} href="#">Register a new account</a>
+                or <a id="link__register" onClick={() => ViewManager.broadcast("register")} href="#">Register a new account</a>
                 </p>
 
                 <p className="mt-5 mb-3 text-muted">© 2017-2018</p>

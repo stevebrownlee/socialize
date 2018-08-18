@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "auth0-js": "^9.6.1",
-    "bootstrap": "^4.1.1",
     "jquery": "^3.3.1",
     "jquery-modal": "^0.9.1",
     "popper.js": "^1.14.3",
@@ -18,5 +17,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "bootstrap": "^4.1.3"
   }
 }

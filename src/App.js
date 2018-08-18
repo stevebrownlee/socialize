@@ -1,7 +1,4 @@
 import React, { Component } from "react"
-import "bootstrap/dist/css/bootstrap.min.css"
-import "bootstrap/dist/js/bootstrap.min"
-import "./App.css"
 import NavBar from "./nav/NavBar"
 import Home from "./newsfeed/Home"
 import SearchResults from "./search/SearchResults"
@@ -10,12 +7,21 @@ import Auth from "./auth/Auth.js"
 import Notifications from "./user/Notifications"
 import Logout from "./auth/Logout"
 import LoginPrompt from "./auth/LoginPrompt"
+import ViewManager from "./modules/ViewManager"
+
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/js/bootstrap.min"
+import "./App.css"
 
 class App extends Component {
     constructor(props) {
         super(props)
 
+        // Initial new object for Auth0 authentication
         this.auth = new Auth()
+
+        // Initialize ViewManager for switching main view
+        ViewManager.init("#root", "changeView", this.switch)
 
         // Set initial state
         this.state = {
@@ -27,22 +33,20 @@ class App extends Component {
         }
     }
 
+    switch = event => {
+        const activeUser = this.state.viewProps.activeUser
 
-    // View switcher -> passed to NavBar and Login
-    // Argument can be an event (via NavBar) or a string (via Login)
-    showView = (viewOrEvent, ...props) => {
-        const view = viewOrEvent.hasOwnProperty("target") ?
-                     viewOrEvent.target.id.split("__")[1] :
-                     viewOrEvent
+        // Retrieve any notifications for the navbar, then switch the view
+        Notifications.load(activeUser).then(notes => {
+            const _viewProps = Object.assign({
+                notifications: notes,
+                activeUser: activeUser
+            }, event.detail.payload)
 
-        Notifications.load(this.state.viewProps.activeUser).then(notes => {
+            // Update state to trigger the view change
             this.setState({
-                currentView: view,
-                viewProps: Object.assign({
-                    showView: this.showView,
-                    notifications: notes,
-                    activeUser: this.state.viewProps.activeUser
-                }, ...props)
+                currentView: event.detail.view,
+                viewProps: _viewProps
             })
         })
     }
@@ -62,18 +66,18 @@ class App extends Component {
                         localStorage.setItem("yakId", id)
 
                         Notifications.load(id).then(notes => {
-                            this.showView("home", { notifications: notes, activeUser: id })
+                            ViewManager.broadcast("home", { notifications: notes, activeUser: id })
                         })
                     })
                 } else {
-                    this.showView("validationFailed")
+                    ViewManager.broadcast("validationFailed")
                 }
             })
 
         // activeUser loaded from localStorage. Get notifications for user.
         } else {
             Notifications.load(this.state.viewProps.activeUser).then(notes => {
-                this.showView("home", { notifications: notes })
+                ViewManager.broadcast("home", { notifications: notes })
             })
         }
     }
