@@ -18,11 +18,11 @@ export default class NavBar extends Component {
      * Local search handler, which invokes the searchHandler reference
      * passed from App
      */
-    search = (e) => {
-        if (e.charCode === 13) {
+    search = evt => {
+        if (evt.charCode === 13) {
 
             Search.getResults(this.state.searchTerms)
-            .then(foundItems => {
+                .then(foundItems => {
                     this.setState({ searchTerms: "" })
                     ViewManager.broadcast("results", foundItems)
                 })
@@ -62,7 +62,7 @@ export default class NavBar extends Component {
                     aria-label="Search" />
                 <ul className="navbar-nav px-3">
                     <li className="nav-item text-nowrap">
-                        <a href="#" className="notif" id="nav__profile" onClick={()=>$(".profileMenu").slideToggle(333)}>
+                        <a href="#" className="notif" id="nav__profile" onClick={() => $(".profileMenu").slideToggle(333)}>
                             <span className="num">{this.props.notifications.length}</span>
                         </a>
                     </li>
@@ -75,8 +75,12 @@ export default class NavBar extends Component {
                 <article className="profileMenu">
                     <section className="profileMenu__item">
                         {
-                            this.props.notifications.map((n, idx) =>
-                                <div key={idx}><a title="notifications" id="nav__notifications" href="#">{n}</a></div>)
+                            this.props.notifications.map((note, idx) =>
+                                <div key={`note--${idx}`}>
+                                    <a title="notifications"
+                                        id="nav__notifications"
+                                        href="#">{note}</a>
+                                </div>)
                         }
                     </section>
                 </article>

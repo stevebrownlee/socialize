@@ -1,21 +1,26 @@
-const ViewManager = Object.create(null, {
+import Private from "./Private"
+
+const _private = Private.init()
+
+const ViewManager = Object.create(Private, {
     init: {
         value: function (selector, eventName, fn) {
-            this.eventName = eventName
-            this.selector = eventName
-            this.element = document.querySelector(selector)
-
-            this.element.addEventListener(eventName, fn)
+            _private(this).eventName = eventName
+            _private(this).selector = selector
+            _private(this).element = document.querySelector(selector)
+            _private(this).element.addEventListener(_private(this).eventName, fn)
         }
     },
     broadcast: {
         value: function (view, payload) {
-            this.element.dispatchEvent(new CustomEvent(this.eventName, {
+            _private(this).element.dispatchEvent(
+                new CustomEvent(_private(this).eventName, {
                     detail: {
                         view: view,
                         payload: payload
                     }
-                }))
+                })
+            )
         }
     }
 })

@@ -82,7 +82,6 @@ class App extends Component {
         }
     }
 
-
     View = () => {
         /*
             If no localStorage yakId, then user is unauthenticated. Show basic
@@ -116,7 +115,6 @@ class App extends Component {
         return (
             <React.Fragment>
                 <NavBar {...this.state.viewProps} />
-
                 {this.View()}
             </React.Fragment>
         )
