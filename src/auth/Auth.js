@@ -1,4 +1,4 @@
-import auth0 from "auth0-js/build/auth0";
+import auth0 from "auth0-js/build/auth0"
 import Settings from "../Settings"
 
 export default class Auth {
@@ -6,18 +6,18 @@ export default class Auth {
     auth0 = new auth0.WebAuth({
         domain: "bagoloot.auth0.com",
         clientID: "RUe9qoLtI2fOjc21FpE460NThgWKUKST",
-        redirectUri: "http://localhost:3000/",
+        redirectUri: Settings.redirectUri,
         audience: "https://bagoloot.auth0.com/userinfo",
         responseType: "token id_token",
         scope: "openid profile"
     })
 
     getAccessToken() {
-        const accessToken = localStorage.getItem('access_token');
+        const accessToken = localStorage.getItem("access_token")
         if (!accessToken) {
-            throw new Error('No Access Token found');
+            throw new Error("No Access Token found")
         }
-        return accessToken;
+        return accessToken
     }
 
     getProfile = () => {
@@ -80,8 +80,7 @@ export default class Auth {
                     }
                 })
             }
-        }
-        )
+        })
     }
 
     checkAuthentication = () => {
@@ -97,12 +96,12 @@ export default class Auth {
                             resolve(false)
                         } else {
                             // Get rid of all the tokens sent back by Auth0
-                            window.history.pushState({}, "Yak Social Network", "#");
+                            window.history.pushState({}, "Yak Social Network", "#")
                             resolve(true)
                         }
                     })
-                    // yakId is in localStorage. Resolve promise.
                 } else {
+                    // yakId is in localStorage. Resolve promise.
                     resolve(true)
                 }
             }
@@ -114,13 +113,12 @@ export default class Auth {
             (resolve, reject) => {
                 this.auth0.parseHash((err, authResult) => {
                     if (err) {
-                        console.log(err)
                         reject(err)
                     }
                     if (authResult && authResult.accessToken && authResult.idToken) {
-                        localStorage.setItem('access_token', authResult.accessToken);
-                        localStorage.setItem('id_token', authResult.idToken);
-                        localStorage.setItem('expires_at', JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime()));
+                        localStorage.setItem("access_token", authResult.accessToken)
+                        localStorage.setItem("id_token", authResult.idToken)
+                        localStorage.setItem("expires_at", JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime()))
                         resolve(true)
                     } else {
                         resolve(false)
@@ -133,20 +131,17 @@ export default class Auth {
 
     logout() {
         // Clear Access Token and ID Token from local storage
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('id_token');
-        localStorage.removeItem('expires_at');
-        localStorage.removeItem('yakId');
+        localStorage.removeItem("access_token")
+        localStorage.removeItem("id_token")
+        localStorage.removeItem("expires_at")
+        localStorage.removeItem("yakId")
 
     }
 
     isAuthenticated() {
         // Check whether the current time is past the
         // Access Token's expiry time
-        let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-        return new Date().getTime() < expiresAt;
+        let expiresAt = JSON.parse(localStorage.getItem("expires_at"))
+        return new Date().getTime() < expiresAt
     }
 }
-
-
-
