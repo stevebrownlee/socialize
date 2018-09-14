@@ -26,11 +26,11 @@ export default class App extends Component {
     render() {
         return (
             <React.Fragment>
-                <Route render={history => (
-                    <NavBar { ...history } />
+                <Route render={props => (
+                    <NavBar { ...props } />
                 )} />
-                <Route render={history => (
-                    <Main { ...history } activeUser={this.state.activeUser} />
+                <Route render={props => (
+                    <Main { ...props } activeUser={this.state.activeUser} />
                 )} />
 
             </React.Fragment>
